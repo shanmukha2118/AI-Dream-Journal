@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Dream Journal</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+            transition: background 0.5s ease; 
+            background-size: cover;
+            background-position: center;
+        }
+        textarea { 
+            width: 80%; 
+            height: 120px; 
+            margin: 10px; 
+            padding: 10px; 
+            border-radius: 5px; 
+            border: 1px solid #ccc; 
+            font-size: 16px;
+        }
+        button { 
+            padding: 12px 24px; 
+            margin: 10px; 
+            background-color: #007BFF; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px;
+        }
+        button:hover { background-color: #0056b3; }
+        #result, #dreamLog { 
+            margin-top: 20px; 
+            padding: 10px; 
+            background: rgba(255, 255, 255, 0.8); 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        select { 
+            padding: 10px; 
+            margin: 10px; 
+            border-radius: 5px; 
+            border: 1px solid #ccc; 
+            font-size: 16px;
+        }
+        h1 {
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body id="body">
+    <h1>🌙 AI-Powered Dream Journal ✨</h1>
+    <label for="template">Choose a dream template:</label>
+    <select id="template" onchange="applyTemplateAndBackground()">
+        <option value="">-- Select --</option>
+        <option value="I was flying over a vast ocean, feeling free and limitless." data-bg="https://source.unsplash.com/1600x900/?ocean,sky">Flying Dream</option>
+        <option value="I was being chased through a dark forest but couldn't see my pursuer." data-bg="https://source.unsplash.com/1600x900/?forest,dark">Chase Dream</option>
+        <option value="I found myself in a mysterious house with endless rooms." data-bg="https://source.unsplash.com/1600x900/?mystery,house">House Dream</option>
+        <option value="I was lost in an endless city, unable to find my way home." data-bg="https://source.unsplash.com/1600x900/?city,navigation">Lost in City</option>
+        <option value="I was speaking a language I had never learned, yet I understood everything." data-bg="https://source.unsplash.com/1600x900/?language,mystery">Speaking Unknown Language</option>
+        <option value="I found a hidden door in my home that led to an entirely different world." data-bg="https://source.unsplash.com/1600x900/?fantasy,door">Secret Door</option>
+    </select>
+    <br>
+    <textarea id="dreamInput" placeholder="Describe your dream..."></textarea><br>
+    <button onclick="analyzeDream()">🔍 Analyze Dream</button>
+    <button onclick="clearDreams()">🗑 Clear Log</button>
+    <div id="result"></div>
+    <h2>📝 Dream Log</h2>
+    <div id="dreamLog"></div>
+
+    <script>
+        function applyTemplateAndBackground() {
+            const templateSelect = document.getElementById('template');
+            const selectedOption = templateSelect.options[templateSelect.selectedIndex];
+            document.getElementById('dreamInput').value = selectedOption.value;
+            document.body.style.background = `url('${selectedOption.getAttribute('data-bg')}') no-repeat center center fixed`;
+            document.body.style.backgroundSize = 'cover';
+        }
+
+        function analyzeDream() {
+            const dreamText = document.getElementById('dreamInput').value.trim();
+            if (!dreamText) {
+                document.getElementById('result').innerHTML = '<p style="color:red;">Please enter a dream description.</p>';
+                return;
+            }
+            
+            let theme = "Unknown";
+            
+            if (/flying|airplane|bird/.test(dreamText)) theme = "Freedom & Escape";
+            else if (/water|ocean|swimming/.test(dreamText)) theme = "Emotions & Depth";
+            else if (/chase|running|escape/.test(dreamText)) theme = "Anxiety & Fear";
+            else if (/house|home|room/.test(dreamText)) theme = "Security & Comfort";
+            else if (/exam|test|school/.test(dreamText)) theme = "Stress & Pressure";
+            else if (/city|lost|navigation/.test(dreamText)) theme = "Confusion & Exploration";
+            else if (/language|unknown|speak/.test(dreamText)) theme = "Mystery & Knowledge";
+            else if (/door|portal|hidden/.test(dreamText)) theme = "Discovery & Adventure";
+            
+            document.getElementById('result').innerHTML = `<p><strong>Dream Theme:</strong> ${theme}</p>`;
+            logDream(dreamText, theme);
+            document.getElementById('dreamInput').value = "";
+        }
+        
+        function logDream(text, theme) {
+            const logDiv = document.getElementById('dreamLog');
+            const entry = document.createElement('div');
+            entry.style.padding = "10px";
+            entry.style.marginBottom = "10px";
+            entry.style.borderBottom = "1px solid #ccc";
+            entry.innerHTML = `<p><strong>Dream:</strong> ${text} <br> <strong>Theme:</strong> ${theme}</p>`;
+            logDiv.prepend(entry);
+        }
+
+        function clearDreams() {
+            document.getElementById('dreamLog').innerHTML = "";
+            document.getElementById('result').innerHTML = "";
+        }
+    </script>
+</body>
+</html>
+
